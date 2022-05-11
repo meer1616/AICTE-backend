@@ -20,27 +20,31 @@ export const LoginRoute = async (req: Request, res: Response) => {
     if (match) {
 
         const accessToken = jwt.sign({
-            "userName": foundUser.email
+            "email": foundUser.email
         },
             process.env.ACCESS_TOKEN_SECRET || "",
-            { expiresIn: '50s' }
+            { expiresIn: '5m' }
         )
 
         const refreshToken = jwt.sign({
-            "userName": foundUser.email
+            "email": foundUser.email
         },
             process.env.REFRESH_TOKEN_SECRET || "",
             { expiresIn: '1hr' }
         )
 
         foundUser.refreshToken = refreshToken
+
         const result = await foundUser.save()
+        // res.cookie('jwt', refreshToken)
+        res.cookie('jwt', refreshToken, { httpOnly: true, sameSite: "none", maxAge: 24 * 60 * 60 * 1000 })
+        //  { httpOnly: true, secure: true, sameSite: "none", maxAge: 24 * 60 * 60 * 1000 });
         console.log(result);
-        return res.json({ foundUser, accessToken })
+        return res.json({ data: result, accessToken })
     }
-    // else {
-    return res.sendStatus(401)
-    // }
+    else {
+        return res.status(401).json({ message: "you are unauthorized" })
+    }
 
 }
 
