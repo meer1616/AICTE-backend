@@ -24,8 +24,8 @@ export const verifyJWT = async (req: Request, res: Response, next: NextFunction)
         });
         if (!user) return res.status(401).json({ message: "Unauthorized User" })
         req.email = user.email
-        next()
-        return res.sendStatus(200)
+
+        return next()
 
     } catch (error) {
 
