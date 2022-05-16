@@ -4,8 +4,8 @@ import { AppDataSource } from '../../ormconfig';
 // import { Cells } from '../Entities/Cells';
 export const getAllCells = async (req: Request, res: Response) => {
     try {
-        console.log(new Date().toLocaleDateString());
-        console.log(new Date().toLocaleTimeString())
+        // console.log(new Date().toLocaleDateString());
+        // console.log(new Date().toLocaleTimeString())
 
         const allCells = await Cells.find();
         if (!allCells) return res.status(204).json({ message: "No Cell found" });
