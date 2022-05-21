@@ -9,6 +9,9 @@ import RefreshTokenRoute from "./routes/auth/RefreshTokenRoute"
 import logoutRoute from "./routes/auth/LogoutRoute"
 import cellsRoute from "./routes/cellsRoute"
 import auditoriumRoute from "./routes/auditoriumRoute"
+import restaurantRoutes from "./routes/restaurantRoute"
+import foodItemRoutes from "./routes/FoodItemRoutes"
+import orderRoute from "./routes/orderRoute"
 import dotenv from "dotenv"
 import { verifyJWT } from "./middleware/verifyAuth";
 // import { AuthRequest } from "./types/AuthRequest";
@@ -37,6 +40,9 @@ app.use(verifyJWT as unknown as express.RequestHandler)
 
 app.use(`${base}/cells`, cellsRoute)
 app.use(`${base}/auditorium`, auditoriumRoute)
+app.use(`${base}/restaurant`, restaurantRoutes)
+app.use(`${base}/fooditem`, foodItemRoutes)
+app.use(`${base}/order`, orderRoute)
 
 
 app.listen(3000, () => {

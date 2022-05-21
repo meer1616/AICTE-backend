@@ -1,12 +1,9 @@
 import { Cells } from './../Entities/Cells';
 import { Request, Response } from 'express';
 import { AppDataSource } from '../../ormconfig';
-// import { Cells } from '../Entities/Cells';
+
 export const getAllCells = async (req: Request, res: Response) => {
     try {
-        // console.log(new Date().toLocaleDateString());
-        // console.log(new Date().toLocaleTimeString())
-
         const allCells = await Cells.find();
         if (!allCells) return res.status(204).json({ message: "No Cell found" });
         return res.status(200).json({ length: allCells.length, allCells });
@@ -21,7 +18,6 @@ export const RegisterCells = async (req: Request, res: Response) => {
         const { cellName, cellEmail, cellCode, contactNumber, imageUrl, ManagerId, addressLine, city, pincode, state, employees } = req.body
 
         console.log({ cellName, cellEmail, cellCode, contactNumber, imageUrl, ManagerId, addressLine, city, pincode, state, employees });
-
 
         if (!cellName || !cellEmail || !cellCode || !contactNumber || !imageUrl || !ManagerId || !addressLine || !city || !pincode || !state || !employees) return res.status(400).json({ message: "Enter the required field" })
 
@@ -68,6 +64,8 @@ export const deleteCell = async (req: Request, res: Response) => {
         return res.status(500).json({ message: error.message });
     }
 };
+
+
 export const getCellById = async (req: Request, res: Response) => {
     try {
         if (!req.params?.id)

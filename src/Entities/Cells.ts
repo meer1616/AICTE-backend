@@ -50,7 +50,4 @@ export class Cells extends BaseEntity {
 
     @Column()
     createdAt: string
-
-
-
 }
