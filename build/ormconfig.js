@@ -10,11 +10,11 @@ const FoodItem_1 = require("./src/Entities/FoodItem");
 const Order_1 = require("./src/Entities/Order");
 exports.AppDataSource = new typeorm_1.DataSource({
     type: "postgres",
-    host: "localhost",
-    port: 5433,
-    username: "postgres",
-    password: "KSP135246@m",
-    database: "aicte",
+    host: process.env.Host,
+    port: Number(process.env.Port),
+    username: process.env.User,
+    password: process.env.Password,
+    database: process.env.Database,
     entities: [User_1.User, Cells_1.Cells, Auditorium_1.Auditorium, Restaurant_1.Restaurant, FoodItem_1.FoodItems, Order_1.Order],
     synchronize: true,
     logging: true,
