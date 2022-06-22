@@ -19,7 +19,7 @@ dotenv.config()
 const app: Express = express();
 
 const base = '/api/v1'
-app.use(`${base}/hi`, (req, res) => {
+app.get(`${base}/hi`, (req, res) => {
     res.send("Hi there")
 })
 
@@ -47,6 +47,11 @@ app.use(`${base}/auditorium`, auditoriumRoute)
 app.use(`${base}/restaurant`, restaurantRoutes)
 app.use(`${base}/fooditem`, foodItemRoutes)
 app.use(`${base}/order`, orderRoute)
+
+app.use(`*`, (req, res) => {
+    res.send("route not found")
+})
+
 
 const PORT = process.env.PORT || 4000
 app.listen(PORT, () => {
