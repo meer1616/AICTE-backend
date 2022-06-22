@@ -2,6 +2,7 @@ import { Entity, Column, PrimaryGeneratedColumn, BaseEntity } from "typeorm"
 
 @Entity('order')
 export class Order extends BaseEntity {
+
     @PrimaryGeneratedColumn('uuid')
     id: string
 

@@ -10,7 +10,6 @@ export const getAllCells = async (req: Request, res: Response) => {
     } catch (error) {
         return res.status(500).json({ message: error.message });
     }
-
 }
 
 export const RegisterCells = async (req: Request, res: Response) => {
@@ -48,7 +47,6 @@ export const RegisterCells = async (req: Request, res: Response) => {
     } catch (error) {
         return res.status(500).json({ message: error.message });
     }
-
 }
 
 export const deleteCell = async (req: Request, res: Response) => {

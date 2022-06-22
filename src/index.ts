@@ -18,6 +18,11 @@ import { verifyJWT } from "./middleware/verifyAuth";
 dotenv.config()
 const app: Express = express();
 
+const base = '/api/v1'
+app.use(`${base}/hi`, (req, res) => {
+    res.send("Hi there")
+})
+
 AppDataSource.initialize().then(() => {
     console.log("connection successfull");
 }).catch((err) => {
@@ -29,7 +34,6 @@ app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 app.use(cookieParser())
 
-const base = '/api/v1'
 
 app.use(`${base}/register`, UserRoute)
 app.use(`${base}/login`, loginRoute)
@@ -44,7 +48,7 @@ app.use(`${base}/restaurant`, restaurantRoutes)
 app.use(`${base}/fooditem`, foodItemRoutes)
 app.use(`${base}/order`, orderRoute)
 
-
-app.listen(3000, () => {
-    console.log('server is running at http://localhost:3000');
+const PORT = process.env.PORT || 4000
+app.listen(PORT, () => {
+    console.log(`server is running at ${PORT}`);
 })
