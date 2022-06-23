@@ -20,14 +20,20 @@ export const LoginRoute = async (req: Request, res: Response) => {
     if (match) {
 
         const accessToken = jwt.sign({
-            "email": foundUser.email
+            "UserInfo": {
+                "useremail": foundUser.email,
+                "roles": foundUser.role
+            }
         },
             process.env.ACCESS_TOKEN_SECRET || "",
             { expiresIn: '5m' }
         )
 
         const refreshToken = jwt.sign({
-            "email": foundUser.email
+            "UserInfo": {
+                "username": foundUser.email,
+                "roles": foundUser.role
+            }
         },
             process.env.REFRESH_TOKEN_SECRET || "",
             { expiresIn: '1hr' }

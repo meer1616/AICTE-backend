@@ -19,7 +19,10 @@ export const Refresh = async (req: Request, res: Response) => {
         (err: any, decode: any) => {
             if (err || foundUser.email !== decode.email) return res.sendStatus(403)
             const accessToken = jwt.sign({
-                "email": foundUser.email
+                "UserInfo": {
+                    "useremail": foundUser.email,
+                    "roles": foundUser.role
+                }
             },
                 process.env.ACCESS_TOKEN_SECRET || "",
                 { expiresIn: '5m' })
