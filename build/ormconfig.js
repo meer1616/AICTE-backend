@@ -1,4 +1,7 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppDataSource = void 0;
 const User_1 = require("./src/Entities/User");
@@ -8,6 +11,12 @@ const Auditorium_1 = require("./src/Entities/Auditorium");
 const Restaurant_1 = require("./src/Entities/Restaurant");
 const FoodItem_1 = require("./src/Entities/FoodItem");
 const Order_1 = require("./src/Entities/Order");
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config();
+console.log(process.env.Host);
+console.log(process.env.User);
+console.log(process.env.Port);
+console.log(process.env.ACCESS_TOKEN_SECRET);
 exports.AppDataSource = new typeorm_1.DataSource({
     type: "postgres",
     host: process.env.Host,
