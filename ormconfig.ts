@@ -5,6 +5,14 @@ import { Auditorium } from "./src/Entities/Auditorium";
 import { Restaurant } from "./src/Entities/Restaurant";
 import { FoodItems } from "./src/Entities/FoodItem";
 import { Order } from "./src/Entities/Order";
+import dotenv from "dotenv"
+dotenv.config()
+
+console.log(process.env.Host);
+console.log(process.env.User);
+console.log(process.env.Port);
+console.log(process.env.ACCESS_TOKEN_SECRET);
+
 
 export const AppDataSource = new DataSource({
     // type: "postgres",
