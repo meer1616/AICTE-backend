@@ -18,7 +18,7 @@ export const LoginRoute = async (req: Request, res: Response) => {
 
     const match = await compare(password, foundUser.hashedPassword)
     if (match) {
-
+        const roles = Object.values(foundUser.role)
         const accessToken = jwt.sign({
             "UserInfo": {
                 "useremail": foundUser.email,
@@ -46,7 +46,7 @@ export const LoginRoute = async (req: Request, res: Response) => {
         res.cookie('jwt', refreshToken, { httpOnly: true, sameSite: "none", maxAge: 24 * 60 * 60 * 1000 })
         //  { httpOnly: true, secure: true, sameSite: "none", maxAge: 24 * 60 * 60 * 1000 });
         console.log(result);
-        return res.json({ data: result, accessToken })
+        return res.json({ data: result, accessToken, roles })
     }
     else {
         return res.status(401).json({ message: "you are unauthorized" })
