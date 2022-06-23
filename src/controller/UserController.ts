@@ -44,6 +44,7 @@ export const registerUser = async (req: Request, res: Response) => {
         user.imageUrl = imageUrl;
         user.role = [2001, 5000];
         user.dateOfBirth = new Date(dateOfBirth);
+        user.createdAt = new Date();
         // save the user
         const newUser = await user.save().catch((err) => {
             res.json({ error: err.detail });

@@ -68,7 +68,7 @@ export const getCellById = async (req: Request, res: Response) => {
     try {
         if (!req.params?.id)
             return res.status(400).json({ message: "cell id required" });
-        const cell = await Cells.findOne({ where: { id: Number(req.params.id) } });
+        const cell = await Cells.findOne({ where: { id: req.params.id } });
         if (!cell)
             return res.status(204).json({ message: `no cell with id ${cell} found` });
         // const result = await Cells.delete({ id: req.body.id });
@@ -83,9 +83,9 @@ export const updateCell = async (req: Request, res: Response) => {
         const { id } = req.params;
         const { cellName, cellEmail, cellCode, contactNumber, imageUrl, ManagerId, addressLine, city, pincode, state, employees } = req.body;
         if (!id) return res.status(204).json({ message: `id not found` });
-        const cellId = await Cells.findOne({ where: { id: Number(id) } });
+        const cellId = await Cells.findOne({ where: { id: id } });
         if (!cellId)
-            return res.json({ message: `no cell with id ${Number(id)} found` }).status(204);
+            return res.json({ message: `no cell with id ${id} found` }).status(204);
         if (cellName || cellEmail || cellCode || contactNumber || imageUrl || ManagerId || addressLine || city || pincode || state || employees) {
             await AppDataSource.createQueryBuilder()
                 .update(Cells)
