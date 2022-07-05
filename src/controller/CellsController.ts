@@ -3,6 +3,8 @@ import { Request, Response } from 'express';
 import { AppDataSource } from '../../ormconfig';
 
 export const getAllCells = async (req: Request, res: Response) => {
+    // console.log("req", req);
+
     try {
         const allCells = await Cells.find();
         if (!allCells) return res.status(204).json({ message: "No Cell found" });

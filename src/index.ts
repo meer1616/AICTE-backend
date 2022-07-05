@@ -18,7 +18,11 @@ import { verifyJWT } from "./middleware/verifyAuth";
 // import { AuthRequest } from "./types/AuthRequest";
 dotenv.config()
 const app: Express = express();
-
+const corsOptions = {
+    origin: 'http://localhost:3000',
+    credentials: true,            //access-control-allow-credentials:true
+    optionSuccessStatus: 200,
+}
 const base = '/api/v1'
 app.get(`${base}/hi`, (req, res) => {
     res.send("Hi there")
@@ -30,8 +34,8 @@ AppDataSource.initialize().then(() => {
     console.log(err);
 })
 
-app.use(cors())
-app.use(express.urlencoded({ extended: true }))
+app.use(cors(corsOptions))
+app.use(express.urlencoded({ extended: false }))
 app.use(express.json())
 app.use(cookieParser())
 
@@ -54,8 +58,8 @@ app.use(`*`, (req, res) => {
 })
 
 
-const PORT = process.env.PORT || 4000
-// const PORT = 4000
+// const PORT = process.env.PORT || 4000
+const PORT = 4000
 app.listen(PORT, () => {
     console.log(`server is running at ${PORT}`);
 })
