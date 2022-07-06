@@ -13,6 +13,8 @@ import auditoriumRoute from "./routes/auditoriumRoute"
 import restaurantRoutes from "./routes/restaurantRoute"
 import foodItemRoutes from "./routes/FoodItemRoutes"
 import orderRoute from "./routes/orderRoute"
+import forgetPasswordRoute from "./routes/forgetPasswordRoute"
+import resetPasswordRoute from "./routes/resetPasswordRoute"
 import dotenv from "dotenv"
 import { verifyJWT } from "./middleware/verifyAuth";
 // import { AuthRequest } from "./types/AuthRequest";
@@ -40,10 +42,12 @@ app.use(express.json())
 app.use(cookieParser())
 
 
+app.use(`${base}/reset-password`, resetPasswordRoute)
 app.use(`${base}/register`, UserRoute)
 app.use(`${base}/login`, loginRoute)
 app.use(`${base}/refresh`, RefreshTokenRoute)
 app.use(`${base}/logout`, logoutRoute)
+app.use(`${base}/forget-password`, forgetPasswordRoute)
 
 app.use(verifyJWT as unknown as express.RequestHandler)
 

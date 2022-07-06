@@ -50,7 +50,7 @@ export const LoginRoute = async (req: Request, res: Response) => {
             return res.json({ success: true, user: result, accessToken, refreshToken, roles })
         }
         else {
-            return res.status(401).json({ message: "you are unauthorized" })
+            return res.status(401).json({ message: "Incorrect password please try again." })
         }
     } catch (error) {
         res.status(500).json({ message: "error  ", error: error })
