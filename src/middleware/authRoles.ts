@@ -17,8 +17,27 @@ import { Role } from "../utilitiy/Roles";
 
 // }
 
-export const authRole = async (req: AuthRequest, res: Response, next: NextFunction) => {
-    console.log("req in authrole", req.roles);
+export const authSuperAdminRole = async (req: AuthRequest, res: Response, next: NextFunction) => {
+    console.log("req in authSuperrole", req.roles);
+    try {
+
+        if (req.roles?.toString().includes(Role.SUPERADMIN)) {
+            console.log(`you can access `);
+            next()
+        }
+        else {
+            console.log(`you cannot access with email ${req.email}`);
+            return res.status(401).json({ message: 'unauthorized user' });
+        }
+    } catch (error) {
+        console.log("error in authSuperrole", error.message);
+
+    }
+}
+
+
+export const authAdminRole = async (req: AuthRequest, res: Response, next: NextFunction) => {
+    console.log("req in authadminrole", req.roles);
     try {
 
         if (req.roles?.toString().includes(Role.ADMIN)) {
@@ -30,7 +49,25 @@ export const authRole = async (req: AuthRequest, res: Response, next: NextFuncti
             return res.status(401).json({ message: 'unauthorized user' });
         }
     } catch (error) {
-        console.log("error in authrole", error.message);
+        console.log("error in authadminrole", error.message);
+
+    }
+}
+
+export const authUserRole = async (req: AuthRequest, res: Response, next: NextFunction) => {
+    console.log("req in authUserrole", req.roles);
+    try {
+
+        if (req.roles?.toString().includes(Role.User)) {
+            console.log(`you can access `);
+            next()
+        }
+        else {
+            console.log(`you cannot access with email ${req.email}`);
+            return res.status(401).json({ message: 'unauthorized user' });
+        }
+    } catch (error) {
+        console.log("error in authUserrole", error.message);
 
     }
 }

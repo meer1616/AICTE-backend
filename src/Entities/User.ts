@@ -29,6 +29,9 @@ export class User extends BaseEntity {
     @Column()
     imageUrl: string
 
+    @Column()
+    cellType: string
+
     @Column({
         type: "simple-array",
     })

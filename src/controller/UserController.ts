@@ -13,6 +13,7 @@ export const registerUser = async (req: Request, res: Response) => {
             password,
             imageUrl,
             dateOfBirth,
+            cellType
         } = req.body;
         if (
             !firstName ||
@@ -21,7 +22,8 @@ export const registerUser = async (req: Request, res: Response) => {
             !email ||
             !password ||
             !imageUrl ||
-            !dateOfBirth
+            !dateOfBirth ||
+            !cellType
         ) {
             return res.status(400).json({ message: "Enter the required field" });
         }
@@ -42,6 +44,7 @@ export const registerUser = async (req: Request, res: Response) => {
         user.hashedPassword = hashPass;
         user.contactNumber = Number(contactNumber);
         user.imageUrl = imageUrl;
+        user.cellType = cellType;
         user.role = [3];
         user.dateOfBirth = new Date(dateOfBirth);
         user.createdAt = new Date();
@@ -59,13 +62,15 @@ export const getAllUser = async (req: Request, res: Response) => {
     try {
         const allUsers = await User.find();
         if (!allUsers) return res.status(204).json({ message: "No User found" });
-        return res.status(200).json(allUsers);
+        return res.status(200).json({ length: allUsers.length, allUsers });
     } catch (error) {
         return res.status(500).json({ message: error.message });
     }
 };
 
 export const deleteUser = async (req: Request, res: Response) => {
+    console.log("del user id", req?.body?.id);
+
     try {
         if (!req?.body?.id)
             return res.status(400).json({ message: "user id required" });
