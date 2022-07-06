@@ -1,3 +1,4 @@
+import { AuthRequest } from './../types/AuthRequest';
 import { NextFunction, Response } from "express"
 import jwt from "jsonwebtoken"
 import { User } from "../Entities/User";
@@ -17,7 +18,7 @@ declare module 'express-serve-static-core' {
 // }
 
 
-export const verifyJWT = async (req: Request, res: Response, next: NextFunction) => {
+export const verifyJWT = async (req: AuthRequest, res: Response, next: NextFunction) => {
 
     try {
         // let dataOfUser
@@ -26,26 +27,26 @@ export const verifyJWT = async (req: Request, res: Response, next: NextFunction)
 
         const token = req.headers['authorization']?.split(" ")[1];
         if (!token) return res.status(401).json({ messsage: "Unauthorized" })
-        jwt.verify(token, process.env.ACCESS_TOKEN_SECRET || '', (err, user) => {
+        jwt.verify(token, process.env.ACCESS_TOKEN_SECRET || '', async (err, user: any) => {
             // console.log(err);
+            // console.log(user, "userrrrr");
+
             if (user) {
 
                 const findemail = async (data: any) => {
-
-                    const user = await User.findOne({
+                    // verify that user exist or not
+                    const verifyUser = await User.findOne({
                         where: { email: data.UserInfo.useremail }
                     });
                     // console.log("finding", data);
 
-                    if (!user) return res.status(401).json({ message: "Unauthorized User" })
-                    req.email = user.email
-                    // console.log("req email", user.email);
+                    if (!verifyUser) return res.status(401).json({ message: "Unauthorized User" })
+                    req.email = verifyUser.email
+                    req.roles = verifyUser.role
+
+                    next()
                 }
-
                 findemail(user)
-
-                next()
-
             }
             else if (err?.message === 'jwt expired') {
                 return res.json({ statuscode: 190, success: false, message: err.message })
@@ -55,35 +56,9 @@ export const verifyJWT = async (req: Request, res: Response, next: NextFunction)
             }
         }
 
-            // if (err) {
-            //     if (err?.message === 'jwt expired') {
-            //         res.json({ message: 'Token expired' })
-            //     }
-            //     res.json({ message: err.message })
-            // }
-            // else {
-            //     console.log("reached");
-            //     // const findemail = async (data: any) => {
-
-            //     //     const user = await User.findOne({
-            //     //         where: { email: data.UserInfo.useremail }
-            //     //     });
-            //     //     console.log("finding", data);
-
-            //     //     if (!user) return res.status(401).json({ message: "Unauthorized User" })
-            //     //     req.email = user.email
-            //     //     console.log("req email", user.email);
-            //     // }
-
-            //     // findemail(user)
-
-            // }
 
 
         )
-        // console.log("data", data);
-
-        // return next()
 
     } catch (error) {
 

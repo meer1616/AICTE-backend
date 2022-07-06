@@ -27,7 +27,7 @@ export const LoginRoute = async (req: Request, res: Response) => {
                 }
             },
                 process.env.ACCESS_TOKEN_SECRET || "",
-                { expiresIn: '1m' }
+                { expiresIn: '10d' }
             )
 
             const refreshToken = jwt.sign({
@@ -37,7 +37,7 @@ export const LoginRoute = async (req: Request, res: Response) => {
                 }
             },
                 process.env.REFRESH_TOKEN_SECRET || "",
-                { expiresIn: '1hr' }
+                { expiresIn: '30d' }
             )
 
             foundUser.refreshToken = refreshToken

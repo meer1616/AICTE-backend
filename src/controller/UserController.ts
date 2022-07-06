@@ -42,7 +42,7 @@ export const registerUser = async (req: Request, res: Response) => {
         user.hashedPassword = hashPass;
         user.contactNumber = Number(contactNumber);
         user.imageUrl = imageUrl;
-        user.role = [2001, 5000];
+        user.role = [3];
         user.dateOfBirth = new Date(dateOfBirth);
         user.createdAt = new Date();
         // save the user

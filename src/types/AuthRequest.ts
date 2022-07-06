@@ -3,8 +3,9 @@
 import { Request as ExpressRequest } from 'express';
 
 
-// export type AuthRequest = Request & { email: string };
+export type AuthRequest = ExpressRequest & { email?: string, roles?: number[] };
 
 export interface Request extends ExpressRequest {
+    roles: number[];
     email: string;
 }

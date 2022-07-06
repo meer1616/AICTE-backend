@@ -49,7 +49,7 @@ app.use(`${base}/refresh`, RefreshTokenRoute)
 app.use(`${base}/logout`, logoutRoute)
 app.use(`${base}/forget-password`, forgetPasswordRoute)
 
-app.use(verifyJWT as unknown as express.RequestHandler)
+app.use(verifyJWT)
 
 app.use(`${base}/cells`, cellsRoute)
 app.use(`${base}/auditorium`, auditoriumRoute)
