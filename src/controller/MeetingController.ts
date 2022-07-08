@@ -7,6 +7,7 @@ import { User } from '../Entities/User';
 export const getMeetings = async (req: Request, res: Response) => {
 
     try {
+
         const getMeetings = await AppDataSource
             .getRepository(Meeting)
             .createQueryBuilder("meeting")
@@ -33,15 +34,17 @@ export const createMeetings = async (req: AuthRequest, res: Response) => {
         createnewMeetings.zoomUrl = zoomUrl
         const userToAttainMeeting = await User.findOne({ where: { id: req.userId } });
 
+        console.log("userToAttainMeeting", userToAttainMeeting);
+
         if (userToAttainMeeting) {
             createnewMeetings.attendees = [userToAttainMeeting]
-            return res.json({ success: true, message: "successfully insertes attendees" })
+            // res.json({ success: true, message: "successfully insertes attendees" })
         }
 
         const newMeeting = await createnewMeetings.save().catch((err) => {
             res.json({ success: false, error: err })
         })
-        return res.status(201).json({ success: true, newMeeting });
+        return res.status(201).json({ success: true, message: "attendes added successfully", newMeeting });
     } catch (error) {
         return res.status(500).json({ message: error.message });
     }
