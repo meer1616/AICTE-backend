@@ -15,7 +15,6 @@ export const getMeetings = async (req: Request, res: Response) => {
 
         console.log("by left join", getMeetings);
 
-
         const getallMeetings = await Meeting.find()
         console.log("getallMeetings", getallMeetings);
 
@@ -24,7 +23,6 @@ export const getMeetings = async (req: Request, res: Response) => {
     } catch (error) {
         return res.status(500).json({ message: error.message });
     }
-
 }
 export const createMeetings = async (req: AuthRequest, res: Response) => {
 
@@ -47,8 +45,6 @@ export const createMeetings = async (req: AuthRequest, res: Response) => {
     } catch (error) {
         return res.status(500).json({ message: error.message });
     }
-
-
 }
 export const deleteMeetings = async (req: AuthRequest, res: Response) => {
 
