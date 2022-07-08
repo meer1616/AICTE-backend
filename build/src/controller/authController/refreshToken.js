@@ -1,7 +1,11 @@
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
 }) : (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     o[k2] = m[k];
@@ -37,20 +41,24 @@ const dotenv = __importStar(require("dotenv"));
 const User_1 = require("../../Entities/User");
 dotenv.config();
 const Refresh = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const cookie = req.cookies;
-    console.log("cookie", cookie);
-    if (!(cookie === null || cookie === void 0 ? void 0 : cookie.jwt))
-        return res.sendStatus(401);
-    const refreshToken = cookie.jwt;
+    console.log(req.body.token);
+    const refreshToken = req.body.token;
     const foundUser = yield User_1.User.findOne({ where: { refreshToken } });
+    console.log("foundUser", foundUser);
     if (!foundUser)
-        return res.sendStatus(403);
+        return res.send("getting 403 what to do");
+    console.log("process.env.REFRESH_TOKEN_SECRET", process.env.REFRESH_TOKEN_SECRET);
+    console.log("refreshToken", refreshToken);
     return jsonwebtoken_1.default.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET || '', (err, decode) => {
-        if (err || foundUser.email !== decode.email)
-            return res.sendStatus(403);
+        console.log("decode", decode);
+        if (err || foundUser.email !== decode.UserInfo.useremail)
+            return res.status(403).json({ err });
         const accessToken = jsonwebtoken_1.default.sign({
-            "email": foundUser.email
-        }, process.env.ACCESS_TOKEN_SECRET || "", { expiresIn: '5m' });
+            "UserInfo": {
+                "useremail": foundUser.email,
+                "roles": foundUser.role
+            }
+        }, process.env.ACCESS_TOKEN_SECRET || "", { expiresIn: '25m' });
         return res.json({ roles: foundUser.role, accessToken });
     });
 });

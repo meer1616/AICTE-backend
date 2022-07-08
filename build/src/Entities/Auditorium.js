@@ -14,79 +14,81 @@ const typeorm_1 = require("typeorm");
 let Auditorium = class Auditorium extends typeorm_1.BaseEntity {
 };
 __decorate([
-    typeorm_1.PrimaryGeneratedColumn('uuid'),
+    (0, typeorm_1.PrimaryGeneratedColumn)('uuid'),
     __metadata("design:type", String)
 ], Auditorium.prototype, "id", void 0);
 __decorate([
-    typeorm_1.Column(),
+    (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], Auditorium.prototype, "name", void 0);
 __decorate([
-    typeorm_1.Column(),
+    (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], Auditorium.prototype, "ManagerName", void 0);
 __decorate([
-    typeorm_1.Column(),
+    (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], Auditorium.prototype, "email", void 0);
 __decorate([
-    typeorm_1.Column(),
+    (0, typeorm_1.Column)(),
     __metadata("design:type", Number)
 ], Auditorium.prototype, "contactNumber", void 0);
 __decorate([
-    typeorm_1.Column(),
+    (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], Auditorium.prototype, "imageUrl", void 0);
 __decorate([
-    typeorm_1.Column(),
+    (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], Auditorium.prototype, "addressLine", void 0);
 __decorate([
-    typeorm_1.Column(),
+    (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], Auditorium.prototype, "city", void 0);
 __decorate([
-    typeorm_1.Column(),
+    (0, typeorm_1.Column)(),
     __metadata("design:type", Number)
 ], Auditorium.prototype, "pincode", void 0);
 __decorate([
-    typeorm_1.Column(),
+    (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], Auditorium.prototype, "state", void 0);
 __decorate([
-    typeorm_1.Column(),
+    (0, typeorm_1.Column)(),
     __metadata("design:type", Number)
 ], Auditorium.prototype, "capacity", void 0);
 __decorate([
-    typeorm_1.Column(),
+    (0, typeorm_1.Column)(),
     __metadata("design:type", Boolean)
 ], Auditorium.prototype, "availability", void 0);
 __decorate([
-    typeorm_1.Column({
+    (0, typeorm_1.Column)({
         nullable: true
     }),
     __metadata("design:type", String)
 ], Auditorium.prototype, "fromDate", void 0);
 __decorate([
-    typeorm_1.Column({
+    (0, typeorm_1.Column)({
         nullable: true
     }),
     __metadata("design:type", String)
 ], Auditorium.prototype, "toDate", void 0);
 __decorate([
-    typeorm_1.Column({
+    (0, typeorm_1.Column)({
         type: "simple-array",
     }),
     __metadata("design:type", Array)
 ], Auditorium.prototype, "facilities", void 0);
 __decorate([
-    typeorm_1.Column({
-        nullable: true
-    }),
-    __metadata("design:type", String)
+    (0, typeorm_1.CreateDateColumn)(),
+    __metadata("design:type", Date)
 ], Auditorium.prototype, "createdAt", void 0);
+__decorate([
+    (0, typeorm_1.UpdateDateColumn)(),
+    __metadata("design:type", Date)
+], Auditorium.prototype, "updateAt", void 0);
 Auditorium = __decorate([
-    typeorm_1.Entity('auditorium')
+    (0, typeorm_1.Entity)('auditorium')
 ], Auditorium);
 exports.Auditorium = Auditorium;
 //# sourceMappingURL=Auditorium.js.map

@@ -14,7 +14,10 @@ const Cells_1 = require("./../Entities/Cells");
 const ormconfig_1 = require("../../ormconfig");
 const getAllCells = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const allCells = yield Cells_1.Cells.find();
+        const allCells = yield ormconfig_1.AppDataSource.getRepository(Cells_1.Cells)
+            .createQueryBuilder("cells")
+            .leftJoinAndSelect("cells.employees", "employees")
+            .getMany();
         if (!allCells)
             return res.status(204).json({ message: "No Cell found" });
         return res.status(200).json({ length: allCells.length, allCells });
@@ -33,8 +36,6 @@ const RegisterCells = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         const duplicateCell = yield Cells_1.Cells.findOne({ where: { cellEmail } });
         if (duplicateCell)
             return res.status(409).json({ message: "Cell has been already registered " });
-        const date = new Date().toLocaleDateString();
-        const time = new Date().toLocaleTimeString();
         const cell = new Cells_1.Cells();
         cell.cellName = cellName;
         cell.cellEmail = cellEmail;
@@ -42,12 +43,7 @@ const RegisterCells = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         cell.contactNumber = contactNumber;
         cell.imageUrl = imageUrl;
         cell.ManagerId = ManagerId;
-        cell.addressLine = addressLine;
-        cell.city = city;
-        cell.pincode = pincode;
-        cell.state = state;
         cell.employees = employees;
-        cell.createdAt = `${date} ${time}`;
         const newCell = yield cell.save().catch((err) => {
             res.json({ error: err });
         });
@@ -79,7 +75,7 @@ const getCellById = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     try {
         if (!((_b = req.params) === null || _b === void 0 ? void 0 : _b.id))
             return res.status(400).json({ message: "cell id required" });
-        const cell = yield Cells_1.Cells.findOne({ where: { id: Number(req.params.id) } });
+        const cell = yield Cells_1.Cells.findOne({ where: { id: req.params.id } });
         if (!cell)
             return res.status(204).json({ message: `no cell with id ${cell} found` });
         return res.status(200).json({ message: "getById successfully ", cell });
@@ -95,9 +91,9 @@ const updateCell = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         const { cellName, cellEmail, cellCode, contactNumber, imageUrl, ManagerId, addressLine, city, pincode, state, employees } = req.body;
         if (!id)
             return res.status(204).json({ message: `id not found` });
-        const cellId = yield Cells_1.Cells.findOne({ where: { id: Number(id) } });
+        const cellId = yield Cells_1.Cells.findOne({ where: { id: id } });
         if (!cellId)
-            return res.json({ message: `no cell with id ${Number(id)} found` }).status(204);
+            return res.json({ message: `no cell with id ${id} found` }).status(204);
         if (cellName || cellEmail || cellCode || contactNumber || imageUrl || ManagerId || addressLine || city || pincode || state || employees) {
             yield ormconfig_1.AppDataSource.createQueryBuilder()
                 .update(Cells_1.Cells)

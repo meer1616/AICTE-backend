@@ -13,16 +13,23 @@ exports.updateUser = exports.deleteUser = exports.getAllUser = exports.registerU
 const ormconfig_1 = require("../../ormconfig");
 const User_1 = require("../Entities/User");
 const bcrypt_1 = require("bcrypt");
+const Cells_1 = require("../Entities/Cells");
+const Address_1 = require("../Entities/Address");
 const registerUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { firstName, lastName, contactNumber, email, password, imageUrl, dateOfBirth, } = req.body;
+        const { firstName, lastName, contactNumber, email, password, imageUrl, dateOfBirth, cellType, addressLine, city, pincode, state } = req.body;
         if (!firstName ||
             !lastName ||
             !contactNumber ||
             !email ||
             !password ||
             !imageUrl ||
-            !dateOfBirth) {
+            !dateOfBirth ||
+            !cellType ||
+            !addressLine ||
+            !city ||
+            !pincode ||
+            !state) {
             return res.status(400).json({ message: "Enter the required field" });
         }
         const duplicate = yield User_1.User.findOne({ where: { email: email } });
@@ -31,7 +38,15 @@ const registerUser = (req, res) => __awaiter(void 0, void 0, void 0, function* (
                 .status(409)
                 .json({ message: "Email has been already registered" });
         }
-        const hashPass = yield bcrypt_1.hash(password, 10);
+        const address = new Address_1.Address();
+        address.addressLine = addressLine;
+        address.city = city;
+        address.pincode = pincode;
+        address.state = state;
+        const savedAddress = yield address.save().catch((err) => {
+            res.json({ error: err.detail });
+        });
+        const hashPass = yield (0, bcrypt_1.hash)(password, 10);
         const user = new User_1.User();
         user.firstName = firstName;
         user.lastName = lastName;
@@ -39,12 +54,27 @@ const registerUser = (req, res) => __awaiter(void 0, void 0, void 0, function* (
         user.hashedPassword = hashPass;
         user.contactNumber = Number(contactNumber);
         user.imageUrl = imageUrl;
-        user.role = [2001, 5000];
+        user.cellType = cellType;
+        user.role = [3];
         user.dateOfBirth = new Date(dateOfBirth);
-        const newUser = yield user.save().catch((err) => {
-            res.json({ error: err.detail });
-        });
-        return res.status(201).json(newUser);
+        if (savedAddress) {
+            user.addressId = savedAddress;
+            const userCell = yield Cells_1.Cells.findOne({ where: { cellName: user.cellType } });
+            console.log("userCell: " + userCell);
+            if (userCell) {
+                user.belongsTocell = userCell;
+                const newUser = yield user.save().catch((err) => {
+                    res.json({ error: err.detail });
+                });
+            }
+            else {
+                return res.status(404).json({ success: false, message: "cells Not found." });
+            }
+        }
+        else {
+            res.status(500).json({ error: "Server error" });
+        }
+        return res.status(201).json({ success: true, message: "User Created successfully" });
     }
     catch (error) {
         return res.status(500).json({ message: error.message });
@@ -53,10 +83,13 @@ const registerUser = (req, res) => __awaiter(void 0, void 0, void 0, function* (
 exports.registerUser = registerUser;
 const getAllUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const allUsers = yield User_1.User.find();
+        const allUsers = yield ormconfig_1.AppDataSource.getRepository(User_1.User)
+            .createQueryBuilder("user")
+            .leftJoinAndSelect("user.addressId", "address")
+            .getMany();
         if (!allUsers)
             return res.status(204).json({ message: "No User found" });
-        return res.status(200).json(allUsers);
+        return res.status(200).json({ length: allUsers.length, allUsers });
     }
     catch (error) {
         return res.status(500).json({ message: error.message });
@@ -64,9 +97,10 @@ const getAllUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
 });
 exports.getAllUser = getAllUser;
 const deleteUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a;
+    var _a, _b;
+    console.log("del user id", (_a = req === null || req === void 0 ? void 0 : req.body) === null || _a === void 0 ? void 0 : _a.id);
     try {
-        if (!((_a = req === null || req === void 0 ? void 0 : req.body) === null || _a === void 0 ? void 0 : _a.id))
+        if (!((_b = req === null || req === void 0 ? void 0 : req.body) === null || _b === void 0 ? void 0 : _b.id))
             return res.status(400).json({ message: "user id required" });
         const user = yield User_1.User.findOne({ where: { id: req.body.id } });
         if (!user)

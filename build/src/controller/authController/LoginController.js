@@ -1,7 +1,11 @@
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
 }) : (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     o[k2] = m[k];
@@ -38,29 +42,41 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const dotenv = __importStar(require("dotenv"));
 dotenv.config();
 const LoginRoute = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { email, password } = req.body;
-    console.log(email, password);
-    if (!email || !password)
-        return res.status(400).json({ message: "Username and Password are required." });
-    const foundUser = yield User_1.User.findOne({ where: { email: email } });
-    if (!foundUser)
-        return res.status(401).json({ message: "Unauthorized user" });
-    const match = yield bcrypt_1.compare(password, foundUser.hashedPassword);
-    if (match) {
-        const accessToken = jsonwebtoken_1.default.sign({
-            "email": foundUser.email
-        }, process.env.ACCESS_TOKEN_SECRET || "", { expiresIn: '5m' });
-        const refreshToken = jsonwebtoken_1.default.sign({
-            "email": foundUser.email
-        }, process.env.REFRESH_TOKEN_SECRET || "", { expiresIn: '1hr' });
-        foundUser.refreshToken = refreshToken;
-        const result = yield foundUser.save();
-        res.cookie('jwt', refreshToken, { httpOnly: true, sameSite: "none", maxAge: 24 * 60 * 60 * 1000 });
-        console.log(result);
-        return res.json({ data: result, accessToken });
+    try {
+        console.log("hit login");
+        const { email, password } = req.body;
+        console.log(email, password);
+        if (!email || !password)
+            return res.status(400).json({ message: "User email and Password are required." });
+        const foundUser = yield User_1.User.findOne({ where: { email: email } });
+        if (!foundUser)
+            return res.status(401).json({ message: "Unauthorized user" });
+        const match = yield (0, bcrypt_1.compare)(password, foundUser.hashedPassword);
+        if (match) {
+            const accessToken = jsonwebtoken_1.default.sign({
+                userId: foundUser.id,
+                user: {
+                    roles: foundUser.role,
+                    email: foundUser.email
+                },
+            }, process.env.ACCESS_TOKEN_SECRET || "", { expiresIn: '10d' });
+            const refreshToken = jsonwebtoken_1.default.sign({
+                "UserInfo": {
+                    "useremail": foundUser.email,
+                    "roles": foundUser.role
+                }
+            }, process.env.REFRESH_TOKEN_SECRET || "", { expiresIn: '30d' });
+            foundUser.refreshToken = refreshToken;
+            const result = yield foundUser.save();
+            console.log(result);
+            return res.json({ success: true, user: result, accessToken, refreshToken });
+        }
+        else {
+            return res.status(401).json({ message: "Incorrect password please try again." });
+        }
     }
-    else {
-        return res.status(401).json({ message: "you are unauthorized" });
+    catch (error) {
+        res.status(500).json({ message: "error  ", error: error });
     }
 });
 exports.LoginRoute = LoginRoute;

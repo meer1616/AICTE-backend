@@ -16,10 +16,18 @@ const auditoriumRoute_1 = __importDefault(require("./routes/auditoriumRoute"));
 const restaurantRoute_1 = __importDefault(require("./routes/restaurantRoute"));
 const FoodItemRoutes_1 = __importDefault(require("./routes/FoodItemRoutes"));
 const orderRoute_1 = __importDefault(require("./routes/orderRoute"));
+const meetingsRoute_1 = __importDefault(require("./routes/meetingsRoute"));
+const forgetPasswordRoute_1 = __importDefault(require("./routes/forgetPasswordRoute"));
+const resetPasswordRoute_1 = __importDefault(require("./routes/resetPasswordRoute"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const verifyAuth_1 = require("./middleware/verifyAuth");
 dotenv_1.default.config();
-const app = express_1.default();
+const app = (0, express_1.default)();
+const corsOptions = {
+    origin: 'http://localhost:3000',
+    credentials: true,
+    optionSuccessStatus: 200,
+};
 const base = '/api/v1';
 app.get(`${base}/hi`, (req, res) => {
     res.send("Hi there");
@@ -29,24 +37,27 @@ ormconfig_1.AppDataSource.initialize().then(() => {
 }).catch((err) => {
     console.log(err);
 });
-app.use(cors_1.default());
-app.use(express_1.default.urlencoded({ extended: true }));
+app.use((0, cors_1.default)(corsOptions));
+app.use(express_1.default.urlencoded({ extended: false }));
 app.use(express_1.default.json());
-app.use(cookie_parser_1.default());
+app.use((0, cookie_parser_1.default)());
+app.use(`${base}/reset-password`, resetPasswordRoute_1.default);
 app.use(`${base}/register`, UserRoute_1.default);
 app.use(`${base}/login`, LoginRoute_1.default);
 app.use(`${base}/refresh`, RefreshTokenRoute_1.default);
 app.use(`${base}/logout`, LogoutRoute_1.default);
+app.use(`${base}/forget-password`, forgetPasswordRoute_1.default);
 app.use(verifyAuth_1.verifyJWT);
 app.use(`${base}/cells`, cellsRoute_1.default);
 app.use(`${base}/auditorium`, auditoriumRoute_1.default);
+app.use(`${base}/meetings`, meetingsRoute_1.default);
 app.use(`${base}/restaurant`, restaurantRoute_1.default);
 app.use(`${base}/fooditem`, FoodItemRoutes_1.default);
 app.use(`${base}/order`, orderRoute_1.default);
 app.use(`*`, (req, res) => {
     res.send("route not found");
 });
-const PORT = process.env.PORT || 4000;
+const PORT = 4000;
 app.listen(PORT, () => {
     console.log(`server is running at ${PORT}`);
 });

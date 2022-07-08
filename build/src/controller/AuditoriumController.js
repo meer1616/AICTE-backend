@@ -51,7 +51,6 @@ const RegisterAuditorium = (req, res) => __awaiter(void 0, void 0, void 0, funct
         auditorium.fromDate = fromDate;
         auditorium.toDate = toDate;
         auditorium.facilities = facilities;
-        auditorium.createdAt = `${date} ${time}`;
         const newAuditorium = yield auditorium.save().catch((err) => {
             res.json({ error: err });
         });

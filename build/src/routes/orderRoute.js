@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const OrderController_1 = require("../controller/OrderController");
-let router = express_1.Router();
+let router = (0, express_1.Router)();
 router.get('/', OrderController_1.getAllOrders);
 router.post('/', OrderController_1.registerOrder);
 router.delete('/', OrderController_1.deleteOrder);

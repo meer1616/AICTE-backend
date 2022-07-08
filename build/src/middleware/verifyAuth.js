@@ -18,17 +18,38 @@ const User_1 = require("../Entities/User");
 const verifyJWT = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     try {
-        const token = (_a = req.headers['authorization']) === null || _a === void 0 ? void 0 : _a.split(" ")[1];
+        console.log("req header", req.headers);
+        console.log("req header auth", req.headers["authorization"]);
+        const token = (_a = req.headers["authorization"]) === null || _a === void 0 ? void 0 : _a.split(" ")[1];
         if (!token)
             return res.status(401).json({ messsage: "Unauthorized" });
-        const data = jsonwebtoken_1.default.verify(token, process.env.ACCESS_TOKEN_SECRET || '');
-        const user = yield User_1.User.findOne({
-            where: { email: data.email }
-        });
-        if (!user)
-            return res.status(401).json({ message: "Unauthorized User" });
-        req.email = user.email;
-        return next();
+        jsonwebtoken_1.default.verify(token, process.env.ACCESS_TOKEN_SECRET || "", (err, data) => __awaiter(void 0, void 0, void 0, function* () {
+            console.log(data, "userrrrr");
+            if (data) {
+                console.log("data in verify auth", data);
+                const verifyUser = yield User_1.User.findOne({
+                    where: { id: data.userId },
+                });
+                console.log(verifyUser, "verifyUser");
+                if (!verifyUser)
+                    return res.status(401).json({ message: "Unauthorized User" });
+                req.user = data.user;
+                req.userId = data.userId;
+                next();
+            }
+            else if ((err === null || err === void 0 ? void 0 : err.message) === "jwt expired") {
+                return res.json({
+                    statuscode: 190,
+                    success: false,
+                    message: err.message,
+                });
+            }
+            else {
+                return res
+                    .status(403)
+                    .json({ success: false, message: "user not authenticated" });
+            }
+        }));
     }
     catch (error) {
         return res.status(500).json({ message: "Server error" });

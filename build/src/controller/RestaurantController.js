@@ -21,8 +21,6 @@ const registerRestaurant = (req, res) => __awaiter(void 0, void 0, void 0, funct
         const duplicateCell = yield Restaurant_1.Restaurant.findOne({ where: { email } });
         if (duplicateCell)
             return res.status(409).json({ message: "Cell has been already registered " });
-        const date = new Date().toLocaleDateString();
-        const time = new Date().toLocaleTimeString();
         const restaurant = new Restaurant_1.Restaurant();
         restaurant.name = name;
         restaurant.description = description;
@@ -34,7 +32,6 @@ const registerRestaurant = (req, res) => __awaiter(void 0, void 0, void 0, funct
         restaurant.city = city;
         restaurant.pincode = pincode;
         restaurant.state = state;
-        restaurant.createdAt = `${date} ${time}`;
         const newRestaurant = yield restaurant.save().catch((err) => {
             res.json({ error: err });
         });

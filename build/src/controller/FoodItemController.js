@@ -21,8 +21,6 @@ const registerFoodItem = (req, res) => __awaiter(void 0, void 0, void 0, functio
         const duplicateCell = yield FoodItem_1.FoodItems.findOne({ where: { name } });
         if (duplicateCell)
             return res.status(409).json({ message: "Food Item has been already registered " });
-        const date = new Date().toLocaleDateString();
-        const time = new Date().toLocaleTimeString();
         const restaurant = new FoodItem_1.FoodItems();
         restaurant.name = name;
         restaurant.description = description;
@@ -30,7 +28,6 @@ const registerFoodItem = (req, res) => __awaiter(void 0, void 0, void 0, functio
         restaurant.type = type;
         restaurant.ingredients = ingredients;
         restaurant.price = price;
-        restaurant.createdAt = `${date} ${time}`;
         const newFood = yield restaurant.save().catch((err) => {
             res.json({ error: err });
         });

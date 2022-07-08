@@ -8,8 +8,7 @@
     "start": "node build/src/index.js",
     "dev": "nodemon src/index.ts",
     "build": "tsc",
-    "generate": "ts-node ./node_modules/typeorm/cli.js migration:generate -n migrationName -p",
-    "typeorm": "ts-node -P ./tsconfig.typeorm.json $(yarn bin typeorm) -d ./src/db/CliDataSource.ts"
+    "generate": "ts-node ./node_modules/typeorm/cli.js migration:generate -n migrationName -p"
   },
   "keywords": [],
   "author": "",

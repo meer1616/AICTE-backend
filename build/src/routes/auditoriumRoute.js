@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const AuditoriumController_1 = require("./../controller/AuditoriumController");
 const express_1 = require("express");
-let router = express_1.Router();
+let router = (0, express_1.Router)();
 router.get('/', AuditoriumController_1.getAllAuditorium);
 router.post('/', AuditoriumController_1.RegisterAuditorium);
 router.delete('/', AuditoriumController_1.deleteAuditorium);

@@ -21,8 +21,6 @@ const registerOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         const duplicateCell = yield Order_1.Order.findOne({ where: { orderNo } });
         if (duplicateCell)
             return res.status(409).json({ message: "Food Item has been already ordered " });
-        const date = new Date().toLocaleDateString();
-        const time = new Date().toLocaleTimeString();
         const restaurant = new Order_1.Order();
         restaurant.foodItems = foodItems;
         restaurant.description = description;
@@ -31,7 +29,6 @@ const registerOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         restaurant.orderNo = orderNo;
         restaurant.totalAmount = totalAmount;
         restaurant.address = address;
-        restaurant.createdAt = `${date} ${time}`;
         const newFood = yield restaurant.save().catch((err) => {
             res.json({ error: err });
         });

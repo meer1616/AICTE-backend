@@ -12,20 +12,16 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.logoutController = void 0;
 const User_1 = require("./../../Entities/User");
 const logoutController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const cookie = req.cookies;
-    if (!(cookie === null || cookie === void 0 ? void 0 : cookie.jwt))
-        return res.sendStatus(204);
-    const refreshToken = cookie.jwt;
+    console.log("hit logout");
+    const { refreshToken } = req.body;
     const foundUser = yield User_1.User.findOne({ where: { refreshToken } });
     if (!foundUser) {
-        res.clearCookie('jwt', { httpOnly: true, sameSite: 'none' });
-        return res.sendStatus(204);
+        return res.status(404).json({ success: true, message: "user not found" });
     }
     foundUser.refreshToken = "";
     const result = yield foundUser.save();
-    console.log(result);
-    res.clearCookie('jwt', { httpOnly: true, sameSite: "none", secure: true });
-    return res.sendStatus(204);
+    console.log("logout res", result);
+    res.status(200).json({ success: true, message: `user is successfully logout ` });
 });
 exports.logoutController = logoutController;
 //# sourceMappingURL=LogoutController.js.map

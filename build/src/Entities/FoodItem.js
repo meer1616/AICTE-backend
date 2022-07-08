@@ -14,41 +14,45 @@ const typeorm_1 = require("typeorm");
 let FoodItems = class FoodItems extends typeorm_1.BaseEntity {
 };
 __decorate([
-    typeorm_1.PrimaryGeneratedColumn('uuid'),
+    (0, typeorm_1.PrimaryGeneratedColumn)('uuid'),
     __metadata("design:type", String)
 ], FoodItems.prototype, "id", void 0);
 __decorate([
-    typeorm_1.Column(),
+    (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], FoodItems.prototype, "name", void 0);
 __decorate([
-    typeorm_1.Column(),
+    (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], FoodItems.prototype, "description", void 0);
 __decorate([
-    typeorm_1.Column(),
+    (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], FoodItems.prototype, "type", void 0);
 __decorate([
-    typeorm_1.Column({
+    (0, typeorm_1.Column)({
         type: "simple-array"
     }),
     __metadata("design:type", Array)
 ], FoodItems.prototype, "ingredients", void 0);
 __decorate([
-    typeorm_1.Column(),
+    (0, typeorm_1.Column)(),
     __metadata("design:type", Number)
 ], FoodItems.prototype, "price", void 0);
 __decorate([
-    typeorm_1.Column(),
+    (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], FoodItems.prototype, "imageUrl", void 0);
 __decorate([
-    typeorm_1.Column(),
-    __metadata("design:type", String)
+    (0, typeorm_1.CreateDateColumn)(),
+    __metadata("design:type", Date)
 ], FoodItems.prototype, "createdAt", void 0);
+__decorate([
+    (0, typeorm_1.UpdateDateColumn)(),
+    __metadata("design:type", Date)
+], FoodItems.prototype, "updateAt", void 0);
 FoodItems = __decorate([
-    typeorm_1.Entity('foodItems')
+    (0, typeorm_1.Entity)('foodItems')
 ], FoodItems);
 exports.FoodItems = FoodItems;
 //# sourceMappingURL=FoodItem.js.map
