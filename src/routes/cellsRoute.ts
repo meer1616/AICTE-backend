@@ -6,11 +6,13 @@ import { authAdminRole, authSuperAdminRole, authUserRole } from "../middleware/a
 
 let router = Router();
 
+// router.get('/', getAllCells)
 router.get('/', authUserRole, getAllCells)
 router.get('/', authAdminRole, getAllCells)
 router.get('/', authSuperAdminRole, getAllCells)
 router.post('/', authSuperAdminRole, RegisterCells)
-router.delete('/', authSuperAdminRole, deleteCell)
+// router.delete('/', authSuperAdminRole, deleteCell)
+router.delete('/', deleteCell)
 router.patch('/:id', authSuperAdminRole, updateCell)
 router.get('/:id', authUserRole, getCellById)
 router.get('/:id', authAdminRole, getCellById)

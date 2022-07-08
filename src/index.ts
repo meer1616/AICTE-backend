@@ -13,6 +13,7 @@ import auditoriumRoute from "./routes/auditoriumRoute"
 import restaurantRoutes from "./routes/restaurantRoute"
 import foodItemRoutes from "./routes/FoodItemRoutes"
 import orderRoute from "./routes/orderRoute"
+import meetingRoute from "./routes/meetingsRoute"
 import forgetPasswordRoute from "./routes/forgetPasswordRoute"
 import resetPasswordRoute from "./routes/resetPasswordRoute"
 import dotenv from "dotenv"
@@ -53,6 +54,7 @@ app.use(verifyJWT)
 
 app.use(`${base}/cells`, cellsRoute)
 app.use(`${base}/auditorium`, auditoriumRoute)
+app.use(`${base}/meetings`, meetingRoute)
 app.use(`${base}/restaurant`, restaurantRoutes)
 app.use(`${base}/fooditem`, foodItemRoutes)
 app.use(`${base}/order`, orderRoute)

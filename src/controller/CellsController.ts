@@ -6,12 +6,22 @@ export const getAllCells = async (req: Request, res: Response) => {
     // console.log("req", req);
 
     try {
-        const allCells = await Cells.find();
+
+        const allCells = await
+            AppDataSource.getRepository(Cells)
+                .createQueryBuilder("cells")
+                .leftJoinAndSelect("cells.employees", "employees")
+                .getMany();
+
+
+        // const allCells = await Cells.find();
         if (!allCells) return res.status(204).json({ message: "No Cell found" });
         return res.status(200).json({ length: allCells.length, allCells });
     } catch (error) {
         return res.status(500).json({ message: error.message });
     }
+
+
 }
 
 export const RegisterCells = async (req: Request, res: Response) => {
@@ -25,8 +35,8 @@ export const RegisterCells = async (req: Request, res: Response) => {
         const duplicateCell = await Cells.findOne({ where: { cellEmail } })
         if (duplicateCell) return res.status(409).json({ message: "Cell has been already registered " })
 
-        const date = new Date().toLocaleDateString()
-        const time = new Date().toLocaleTimeString()
+        // const date = new Date().toLocaleDateString()
+        // const time = new Date().toLocaleTimeString()
 
         const cell = new Cells()
         cell.cellName = cellName
@@ -35,12 +45,12 @@ export const RegisterCells = async (req: Request, res: Response) => {
         cell.contactNumber = contactNumber
         cell.imageUrl = imageUrl
         cell.ManagerId = ManagerId
-        cell.addressLine = addressLine
-        cell.city = city
-        cell.pincode = pincode
-        cell.state = state
+        // cell.addressLine = addressLine
+        // cell.city = city
+        // cell.pincode = pincode
+        // cell.state = state
         cell.employees = employees
-        cell.createdAt = `${date} ${time}`
+        // cell.createdAt = `${date} ${time}`
 
         const newCell = await cell.save().catch((err) => {
             res.json({ error: err })

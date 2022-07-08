@@ -19,13 +19,17 @@ export const LoginRoute = async (req: Request, res: Response) => {
 
         const match = await compare(password, foundUser.hashedPassword)
         if (match) {
-            const roles = Object.values(foundUser.role)
-            const accessToken = jwt.sign({
-                "UserInfo": {
-                    "useremail": foundUser.email,
-                    "roles": foundUser.role
-                }
-            },
+            // const roles = Object.values(foundUser.role)
+            const accessToken = jwt.sign(
+                {
+                    userId: foundUser.id,
+                    user: {
+                        // firstName: foundUser.firstName,
+                        // lastName: foundUser.lastName,
+                        roles: foundUser.role,
+                        email: foundUser.email
+                    },
+                },
                 process.env.ACCESS_TOKEN_SECRET || "",
                 { expiresIn: '10d' }
             )
@@ -47,7 +51,7 @@ export const LoginRoute = async (req: Request, res: Response) => {
             // res.cookie('jwt', refreshToken, { httpOnly: true, sameSite: "none", maxAge: 24 * 60 * 60 * 1000 })
             //  { httpOnly: true, secure: true, sameSite: "none", maxAge: 24 * 60 * 60 * 1000 });
             console.log(result);
-            return res.json({ success: true, user: result, accessToken, refreshToken, roles })
+            return res.json({ success: true, user: result, accessToken, refreshToken })
         }
         else {
             return res.status(401).json({ message: "Incorrect password please try again." })

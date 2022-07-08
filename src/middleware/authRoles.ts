@@ -18,15 +18,15 @@ import { Role } from "../utilitiy/Roles";
 // }
 
 export const authSuperAdminRole = async (req: AuthRequest, res: Response, next: NextFunction) => {
-    console.log("req in authSuperrole", req.roles);
+    console.log("req in authSuperrole", req.user?.roles);
     try {
 
-        if (req.roles?.toString().includes(Role.SUPERADMIN)) {
+        if (req.user?.roles.toString().includes(Role.SUPERADMIN)) {
             console.log(`you can access `);
             next()
         }
         else {
-            console.log(`you cannot access with email ${req.email}`);
+            console.log(`you cannot access with email ${req.user?.email}`);
             return res.status(401).json({ message: 'unauthorized user' });
         }
     } catch (error) {
@@ -37,15 +37,15 @@ export const authSuperAdminRole = async (req: AuthRequest, res: Response, next: 
 
 
 export const authAdminRole = async (req: AuthRequest, res: Response, next: NextFunction) => {
-    console.log("req in authadminrole", req.roles);
+    console.log("req in authadminrole", req.user?.roles);
     try {
 
-        if (req.roles?.toString().includes(Role.ADMIN)) {
+        if (req.user?.roles.toString().includes(Role.ADMIN)) {
             console.log(`you can access `);
             next()
         }
         else {
-            console.log(`you cannot access with email ${req.email}`);
+            console.log(`you cannot access with email ${req.user?.roles}`);
             return res.status(401).json({ message: 'unauthorized user' });
         }
     } catch (error) {
@@ -55,15 +55,15 @@ export const authAdminRole = async (req: AuthRequest, res: Response, next: NextF
 }
 
 export const authUserRole = async (req: AuthRequest, res: Response, next: NextFunction) => {
-    console.log("req in authUserrole", req.roles);
+    // console.log("req in authUserrole", req.roles);
     try {
 
-        if (req.roles?.toString().includes(Role.User)) {
+        if (req.user?.roles?.toString().includes(Role.User)) {
             console.log(`you can access `);
             next()
         }
         else {
-            console.log(`you cannot access with email ${req.email}`);
+            console.log(`you cannot access with email ${req.user?.email}`);
             return res.status(401).json({ message: 'unauthorized user' });
         }
     } catch (error) {

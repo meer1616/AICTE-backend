@@ -12,8 +12,8 @@ export const registerRestaurant = async (req: Request, res: Response) => {
         const duplicateCell = await Restaurant.findOne({ where: { email } })
         if (duplicateCell) return res.status(409).json({ message: "Cell has been already registered " })
 
-        const date = new Date().toLocaleDateString()
-        const time = new Date().toLocaleTimeString()
+        // const date = new Date().toLocaleDateString()
+        // const time = new Date().toLocaleTimeString()
 
         const restaurant = new Restaurant()
         restaurant.name = name
@@ -26,7 +26,7 @@ export const registerRestaurant = async (req: Request, res: Response) => {
         restaurant.city = city
         restaurant.pincode = pincode
         restaurant.state = state
-        restaurant.createdAt = `${date} ${time}`
+        // restaurant.createdAt = `${date} ${time}`
 
         const newRestaurant = await restaurant.save().catch((err) => {
             res.json({ error: err })

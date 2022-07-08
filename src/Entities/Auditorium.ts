@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, BaseEntity } from "typeorm"
+import { Entity, Column, PrimaryGeneratedColumn, BaseEntity, CreateDateColumn, UpdateDateColumn } from "typeorm"
 
 @Entity('auditorium')
 export class Auditorium extends BaseEntity {
@@ -53,9 +53,10 @@ export class Auditorium extends BaseEntity {
     })
     facilities: string[]
 
-    @Column({
-        nullable: true
-    })
-    createdAt: string
+    @CreateDateColumn()
+    createdAt: Date
+
+    @UpdateDateColumn()
+    updateAt: Date
 
 }

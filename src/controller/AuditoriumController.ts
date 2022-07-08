@@ -44,7 +44,7 @@ export const RegisterAuditorium = async (req: Request, res: Response) => {
         auditorium.fromDate = fromDate
         auditorium.toDate = toDate
         auditorium.facilities = facilities
-        auditorium.createdAt = `${date} ${time}`
+        // auditorium.createdAt = `${date} ${time}`
 
         const newAuditorium = await auditorium.save().catch((err) => {
             res.json({ error: err })

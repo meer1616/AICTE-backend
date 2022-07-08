@@ -2,8 +2,11 @@ import { AppDataSource } from "../../ormconfig";
 import { Request, Response } from "express";
 import { User } from "../Entities/User";
 import { hash } from "bcrypt";
+import { Cells } from "../Entities/Cells";
+import { Address } from "../Entities/Address";
+import { AuthRequest } from "../types/AuthRequest";
 
-export const registerUser = async (req: Request, res: Response) => {
+export const registerUser = async (req: AuthRequest, res: Response) => {
     try {
         const {
             firstName,
@@ -13,7 +16,11 @@ export const registerUser = async (req: Request, res: Response) => {
             password,
             imageUrl,
             dateOfBirth,
-            cellType
+            cellType,
+            addressLine,
+            city,
+            pincode,
+            state
         } = req.body;
         if (
             !firstName ||
@@ -23,7 +30,11 @@ export const registerUser = async (req: Request, res: Response) => {
             !password ||
             !imageUrl ||
             !dateOfBirth ||
-            !cellType
+            !cellType ||
+            !addressLine ||
+            !city ||
+            !pincode ||
+            !state
         ) {
             return res.status(400).json({ message: "Enter the required field" });
         }
@@ -35,6 +46,18 @@ export const registerUser = async (req: Request, res: Response) => {
                 .json({ message: "Email has been already registered" });
         }
         // hashing password
+
+        const address = new Address();
+        address.addressLine = addressLine
+        address.city = city
+        address.pincode = pincode
+        address.state = state
+
+
+        const savedAddress = await address.save().catch((err) => {
+            res.json({ error: err.detail });
+        })
+
         const hashPass = await hash(password, 10);
 
         const user = new User();
@@ -47,12 +70,30 @@ export const registerUser = async (req: Request, res: Response) => {
         user.cellType = cellType;
         user.role = [3];
         user.dateOfBirth = new Date(dateOfBirth);
-        user.createdAt = new Date();
-        // save the user
-        const newUser = await user.save().catch((err) => {
-            res.json({ error: err.detail });
-        });
-        return res.status(201).json(newUser);
+        if (savedAddress) {
+            user.addressId = savedAddress
+
+            const userCell = await Cells.findOne({ where: { cellName: user.cellType } });
+
+            console.log("userCell: " + userCell);
+
+            if (userCell) {
+                // save this employee to cell employee
+                user.belongsTocell = userCell
+                const newUser = await user.save().catch((err) => {
+                    res.json({ error: err.detail });
+                });
+            }
+            else {
+                return res.status(404).json({ success: false, message: "cells Not found." });
+            }
+        }
+        else {
+            res.status(500).json({ error: "Server error" });
+        }
+
+        return res.status(201).json({ success: true, message: "User Created successfully" });
+        // return res.status(201).json(newUser);
     } catch (error) {
         return res.status(500).json({ message: error.message });
     }
@@ -60,7 +101,15 @@ export const registerUser = async (req: Request, res: Response) => {
 
 export const getAllUser = async (req: Request, res: Response) => {
     try {
-        const allUsers = await User.find();
+        const allUsers = await
+            AppDataSource.getRepository(User)
+                .createQueryBuilder("user")
+                .leftJoinAndSelect("user.addressId", "address")
+                .getMany();
+
+        // console.log("profiles", profiles);
+
+        // const allUsers = await User.find();
         if (!allUsers) return res.status(204).json({ message: "No User found" });
         return res.status(200).json({ length: allUsers.length, allUsers });
     } catch (error) {

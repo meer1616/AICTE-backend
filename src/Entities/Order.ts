@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, BaseEntity } from "typeorm"
+import { Entity, Column, PrimaryGeneratedColumn, BaseEntity, CreateDateColumn, UpdateDateColumn } from "typeorm"
 
 @Entity('order')
 export class Order extends BaseEntity {
@@ -29,9 +29,10 @@ export class Order extends BaseEntity {
     @Column()
     address: string
 
-    @Column({
-        nullable: true
-    })
-    createdAt: string
+    @CreateDateColumn()
+    createdAt: Date
 
+
+    @UpdateDateColumn()
+    updateAt: Date
 }

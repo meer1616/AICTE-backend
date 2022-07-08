@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, BaseEntity } from "typeorm"
+import { Entity, Column, PrimaryGeneratedColumn, BaseEntity, CreateDateColumn, UpdateDateColumn } from "typeorm"
 
 @Entity('foodItems')
 export class FoodItems extends BaseEntity {
@@ -25,6 +25,9 @@ export class FoodItems extends BaseEntity {
     @Column()
     imageUrl: string
 
-    @Column()
-    createdAt: string
+    @CreateDateColumn()
+    createdAt: Date
+
+    @UpdateDateColumn()
+    updateAt: Date
 }

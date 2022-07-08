@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn, BaseEntity } from "typeorm"
+import { Entity, Column, PrimaryGeneratedColumn, BaseEntity, OneToMany, CreateDateColumn, UpdateDateColumn } from "typeorm"
+import { User } from "./User"
 
 @Entity('cells')
 export class Cells extends BaseEntity {
@@ -31,23 +32,25 @@ export class Cells extends BaseEntity {
     @Column()     //foreignkey
     ManagerId: number
 
-    @Column()
-    addressLine: string
+    // @Column()
+    // addressLine: string
 
-    @Column()
-    city: string
+    // @Column()
+    // city: string
 
-    @Column()
-    pincode: number
+    // @Column()
+    // pincode: number
 
-    @Column()
-    state: string
+    // @Column()
+    // state: string
 
-    @Column({             //foreignKey
-        type: 'simple-array'
-    })
-    employees: number[]
+    @OneToMany(() => User, employees => employees.belongsTocell)
+    employees: User[]
 
-    @Column()
-    createdAt: string
+    @CreateDateColumn()
+    createdAt: Date
+
+    @UpdateDateColumn()
+    updateAt: Date
+    cellsave: User
 }
