@@ -57,7 +57,7 @@ app.use(`${base}/order`, orderRoute_1.default);
 app.use(`*`, (req, res) => {
     res.send("route not found");
 });
-const PORT = 4000;
+const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
     console.log(`server is running at ${PORT}`);
 });
