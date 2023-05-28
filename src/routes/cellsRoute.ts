@@ -1,4 +1,4 @@
-import { verifyJWT } from './../middleware/verifyAuth';
+// import { verifyJWT } from './../middleware/verifyAuth';
 import { deleteCell, getAllCells, RegisterCells, updateCell, getCellById } from './../controller/CellsController';
 import { Router } from "express"
 import { authAdminRole, authSuperAdminRole, authUserRole } from "../middleware/authRoles"

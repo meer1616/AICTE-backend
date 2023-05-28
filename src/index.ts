@@ -1,4 +1,3 @@
-
 import { AppDataSource } from "../ormconfig"
 import { Express, Request, Response, NextFunction } from 'express';
 import express from "express";

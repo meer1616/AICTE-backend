@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn, BaseEntity, CreateDateColumn, UpdateDateColumn, OneToOne } from "typeorm"
+import { Entity, Column, PrimaryGeneratedColumn, BaseEntity, CreateDateColumn, UpdateDateColumn, OneToOne, JoinColumn } from "typeorm"
+import { Restaurant } from "./Restaurant"
 import { User } from "./User"
 
 @Entity('address')
@@ -20,6 +21,8 @@ export class Address extends BaseEntity {
 
     // @Column()
     // employeeId: string
+    @OneToOne(() => Restaurant, restaddress => restaddress.address, { onDelete: 'CASCADE' })
+    restAddress: Address
 
     @OneToOne(() => User, userAddrId => userAddrId.addressId, { onDelete: 'CASCADE' })
     userAddrId: User

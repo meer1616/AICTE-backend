@@ -1,4 +1,6 @@
-import { Entity, Column, PrimaryGeneratedColumn, BaseEntity, CreateDateColumn, UpdateDateColumn } from "typeorm"
+import { Entity, Column, PrimaryGeneratedColumn, BaseEntity, CreateDateColumn, UpdateDateColumn, OneToMany, OneToOne, JoinColumn } from "typeorm"
+import { Address } from "./Address"
+import { Order } from "./Order"
 
 @Entity('restaurant')
 export class Restaurant extends BaseEntity {
@@ -27,17 +29,21 @@ export class Restaurant extends BaseEntity {
     @Column()
     imageUrl: string
 
-    @Column()
-    addressLine: string
+    @OneToOne(() => Address, address => address.restAddress)
+    @JoinColumn()
+    address: Address
+    // @OneToMany(()=>Order,)
+    // @Column()
+    // addressLine: string
 
-    @Column()
-    city: string
+    // @Column()
+    // city: string
 
-    @Column()
-    pincode: number
+    // @Column()
+    // pincode: number
 
-    @Column()
-    state: string
+    // @Column()
+    // state: string
 
     @CreateDateColumn()
     createdAt: Date

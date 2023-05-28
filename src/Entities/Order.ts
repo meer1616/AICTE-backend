@@ -1,4 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn, BaseEntity, CreateDateColumn, UpdateDateColumn } from "typeorm"
+import { FoodItems } from "./FoodItem"
 
 @Entity('order')
 export class Order extends BaseEntity {
@@ -9,7 +10,7 @@ export class Order extends BaseEntity {
     @Column({
         type: "simple-array"
     })
-    foodItems: string[]
+    foodItems: FoodItems[]
 
     @Column()
     description: string
@@ -31,7 +32,6 @@ export class Order extends BaseEntity {
 
     @CreateDateColumn()
     createdAt: Date
-
 
     @UpdateDateColumn()
     updateAt: Date

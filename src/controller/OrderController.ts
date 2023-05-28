@@ -1,8 +1,9 @@
 import { Request, Response } from "express";
 import { AppDataSource } from "../../ormconfig";
 import { Order } from "../Entities/Order";
+import { AuthRequest } from "../types/AuthRequest";
 
-export const registerOrder = async (req: Request, res: Response) => {
+export const registerOrder = async (req: AuthRequest, res: Response) => {
     try {
         const { foodItems, description, orderedBy, orderNo, type, totalAmount, address } = req.body
         console.log(req.body);
@@ -19,10 +20,11 @@ export const registerOrder = async (req: Request, res: Response) => {
         restaurant.foodItems = foodItems
         restaurant.description = description
         restaurant.type = type
-        restaurant.orderedBy = orderedBy
         restaurant.orderNo = orderNo
         restaurant.totalAmount = totalAmount
         restaurant.address = address
+        restaurant.orderedBy = orderedBy
+
         // restaurant.createdAt = `${date} ${time}`
 
         const newFood = await restaurant.save().catch((err) => {

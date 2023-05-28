@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { AppDataSource } from "../../ormconfig";
+import { Address } from "../Entities/Address";
 import { Restaurant } from "../Entities/Restaurant";
 
 export const registerRestaurant = async (req: Request, res: Response) => {
@@ -22,10 +23,24 @@ export const registerRestaurant = async (req: Request, res: Response) => {
         restaurant.contactNumber = contactNumber
         restaurant.imageUrl = imageUrl
         restaurant.restType = restType
-        restaurant.addressLine = addressLine
-        restaurant.city = city
-        restaurant.pincode = pincode
-        restaurant.state = state
+
+        const restAddress = new Address()
+        restAddress.addressLine = addressLine
+        restAddress.city = city
+        restAddress.state = state
+        restAddress.pincode = pincode
+
+        const newrestAddress = await restAddress.save().catch((err) => {
+            res.json({ error: err })
+        })
+
+        if (newrestAddress) {
+            restaurant.address = newrestAddress
+        }
+        // restaurant.addressLine = addressLine
+        // restaurant.city = city
+        // restaurant.pincode = pincode
+        // restaurant.state = state
         // restaurant.createdAt = `${date} ${time}`
 
         const newRestaurant = await restaurant.save().catch((err) => {
@@ -39,9 +54,19 @@ export const registerRestaurant = async (req: Request, res: Response) => {
 
 export const getAllRestaurant = async (req: Request, res: Response) => {
     try {
-        const restaurant = await Restaurant.find();
-        if (!restaurant) return res.status(204).json({ message: "No Restaurant found" });
-        return res.status(200).json({ length: restaurant.length, restaurant });
+        // const restaurant = await Restaurant.find();
+        // console.log("restaurant", restaurant);
+
+        const allUsers = await
+            AppDataSource.getRepository(Restaurant)
+                .createQueryBuilder("restaurant")
+                .leftJoinAndSelect("restaurant.address", "address")
+                .getMany();
+
+        console.log("allUsers", allUsers);
+
+        if (!allUsers) return res.status(204).json({ message: "No Restaurant found" });
+        return res.status(200).json({ length: allUsers.length, allUsers });
     } catch (error) {
         return res.status(500).json({ message: error.message });
     }
